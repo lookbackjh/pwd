@@ -62,7 +62,7 @@ class Permutator():
         return (k/self.args.p_num)
     def metapermutation(self):
         epsilon=self.args.epsilon
-        x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,0.1)
+        x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,self.args.interval)
         feat_info=np.zeros(self.args.num_feature)
         log=self.args.predefined
         bwfilename="n{}bw_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
@@ -114,7 +114,9 @@ class Permutator():
             pos_dis=pos1*np.log(pos1/pos2)
         
         con_sum=0
-        g=dis1*np.log(dis1/dis2)
+
+        g=dis1*(np.log(dis1/dis2))
+        
         con_sum=self.simpson(g,x_grid)
 
         return pos_dis+con_sum

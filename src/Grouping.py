@@ -77,6 +77,7 @@ class Groupinfo():
                 kde = gaussian_kde(cur_data, bw_method=self.group_bandwidth[i] )
                 ## note that each feature will have corresponding bandwidth and KDE estimation for the whole group..
                 p=kde.evaluate(x_grid)
+
                 cum=kde.integrate_box_1d(0,20)
                 #print("cum:{}".format(cum))
                 evaluation=evaluation+(1-self.group_posterior[i])*p/(cum*n)
