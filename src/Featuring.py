@@ -13,6 +13,7 @@ class Feature():
     def findBandwidth(self,x_grid):
         k=0
         #print(len(self.info))
+ 
         if len(self.info[self.info!=0])!=0:
             OOB,bootstrap=self.doBootstrap(self.info[self.info!=0],self.bootstrapnum) ## doing bootstrap, make both OOB and Bootstrap samples (excluding zeros)  
             self.bandwidth=self.AndersonDarling(bootstrap,OOB,x_grid,self.epsilon )## via Anderson-Darling, Obtain the bandwidth
@@ -38,7 +39,7 @@ class Feature():
         bandwidth_loss=[]
         MIN_INT=-999999999
         cur_min=MIN_INT
-        bandwidths=np.arange(0.2,10,0.1)
+        bandwidths=np.arange(0.2,6,0.1)
         opt=0
         ## interation : for every bandwith, for length of Bootstrap number , for length of OOB number for each bootstrap, integration( another interation needed) 
         for j in bandwidths:

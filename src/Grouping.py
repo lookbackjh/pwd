@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import gaussian_kde
+import copy
 from src.Featuring import Feature
 import math
 class Groupinfo():
@@ -55,6 +56,24 @@ class Groupinfo():
             else:
                 group_bandwidth.append(0)
         self.group_bandwidth=group_bandwidth
+    def datatransformation(w1):
+        w2=copy.deepcopy(w1)
+        n,d=np.shape(w2)
+        if n==1:
+            for j in range(d):
+                if w2[0][j]==0:
+                    w2[0][j]=0
+                else:
+                    w2[0][j]=math.log(w2[0][j])
+        else:
+            for i in range(n):
+                for j in range(d):
+                    if w2[i][j]==0:
+                        w2[i][j]=0
+                    else:
+                        w2[i][j]=math.log(w2[i][j])
+        w2=np.negative(w2)
+        return w2
     def summation(self,x_grid):
         ##must be done after finddistribution
         try:
