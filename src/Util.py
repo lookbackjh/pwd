@@ -104,7 +104,7 @@ class Permutator():
             pos_dis=pos1*np.log(pos1/pos2)
         
         con_sum=0
-        stop_pos=0
+        stop_pos=len(x_grid)-1
         for i in range(len(x_grid)):
             if dis1[i]==0 or dis2[i]==0:
                 stop_pos=i-1

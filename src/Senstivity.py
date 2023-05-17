@@ -10,7 +10,7 @@ class Sensitivity():
         pass
     def simulate(self,feat_info):
         if self.args.task==0:        ## simulation for sparse ratio
-            k_candidate=[0.7]
+            k_candidate=[0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
             d = defaultdict(list) ## a dictionary to get the results for the sd and mean for the p-value (too obtain the standard deviation and mean for the p-value repeating 50 times of 1000 permutation)
             for k in k_candidate:
                 pvals=[]
@@ -106,8 +106,8 @@ class Sensitivity():
             scale=predecision_sd[i+int(sparseratio*n)]
             sample1=[]
             sample2=[]
-            sparsity1=0.1*np.random.randint(1,10)
-            sparsity2=0.1*np.random.randint(1,10)
+            sparsity1=0.1*np.random.randint(1,5)
+            sparsity2=0.1*np.random.randint(5,10)
             for sample in range(int(20*(1-sparsity1))):
                 s1=truncnorm.rvs((bounds[0]-loc)/scale, (bounds[1]-loc)/scale, loc=loc, scale=scale)
                 sample1.append(s1)

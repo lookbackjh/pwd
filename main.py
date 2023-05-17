@@ -23,12 +23,12 @@ def datatransformation(w1):
     return w2
 def get_args():
     parser = argparse.ArgumentParser(description='Args Sparse Simulation')
-    parser.add_argument('--num_feature',type=int,default=300,help='number of feature to simulate') ## only can choose n=100, 300, 600
+    parser.add_argument('--num_feature',type=int,default=100,help='number of feature to simulate') ## only can choose n=100, 300, 600
     parser.add_argument('--p_num', type=int, default=1000, help='seed')
-    parser.add_argument('--repeat_num',type=int, default=50, help='to see the mean and sd for the p-value after repeated permutation')
+    parser.add_argument('--repeat_num',type=int, default=19, help='to see the mean and sd for the p-value after repeated permutation')
     parser.add_argument('--x_grid_start',type=int, default=1,help='start of the x-axis')
     parser.add_argument('--x_grid_end',type=int, default=20,help='end of the x-axis')
-    parser.add_argument('--same_ratio',type=int, default=90,help='Difference ratio for each group') ## only can choose 50,90, 100
+    parser.add_argument('--same_ratio',type=int, default=10,help='Difference ratio for each group') ## only can choose 50,90, 100
     parser.add_argument('--interval',type=float,default=0.1,help='interval for x-axis' )
     parser.add_argument('--epsilon',type=float,default=0.0001,help='to_avoid zero division')
     parser.add_argument('--simulated',type=bool,default=True,help='False if you have your own prior knowledg for the absence raito') ## 나중에 건드려야 할듯.
