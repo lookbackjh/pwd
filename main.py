@@ -26,18 +26,18 @@ def datatransformation(w1):
 def get_args():
     parser = argparse.ArgumentParser(description='Args Sparse Simulation')
     parser.add_argument('--num_feature',type=int,default=100,help='number of feature to simulate') ## only can choose n=100, 300, 600
-    parser.add_argument('--p_num', type=int, default=1000, help='seed')
-    parser.add_argument('--repeat_num',type=int, default=19, help='to see the mean and sd for the p-value after repeated permutation')
+    parser.add_argument('--p_num', type=int, default=10, help='seed')
+    parser.add_argument('--repeat_num',type=int, default=10, help='to see the mean and sd for the p-value after repeated permutation')
     parser.add_argument('--x_grid_start',type=int, default=1,help='start of the x-axis')
     parser.add_argument('--x_grid_end',type=int, default=20,help='end of the x-axis')
-    parser.add_argument('--same_ratio',type=int, default=10,help='Difference ratio for each group') ## only can choose 50,90, 100
+    parser.add_argument('--same_ratio',type=int, default=100,help='Same ratio for each group') ## only can choose 10,50, 100 
     parser.add_argument('--interval',type=float,default=0.1,help='interval for x-axis' )
     parser.add_argument('--epsilon',type=float,default=0.0001,help='to_avoid zero division')
-    parser.add_argument('--simulated',type=bool,default=True,help='False if you have your own prior knowledg for the absence raito') ## 나중에 건드려야 할듯.
+    parser.add_argument('--simulated',type=bool,default=True,help='False if you have your own prior knowledge for the absence raito') # if you have your own prior knowledge for the absence ratio set it to False
 
-    parser.add_argument('--predefined',type=bool,default=True,help='False if there is predefined meta analysis') ## 나중에 건드려야 할듯.
+    parser.add_argument('--predefined',type=bool,default=True,help='False if there is predefined meta analysis') # if you have your own meta analysis for the data result set it to False
     parser.add_argument('--different_sparse_ratio',type=int, default=100, help="Default differnt ratio for sparse simulation problem set it to hundred. ")
-    parser.add_argument('--task',type=int,default=1,help='0 for checking sensitivity for the sparsity ratio and 1 for checking sensitivity for various n, k') 
+    parser.add_argument('--task',type=int,default=0,help='0 for checking sensitivity for the sparsity ratio and 1 for checking sensitivity for various n, k') 
     args, _ = parser.parse_known_args()
     return args
 
