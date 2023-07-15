@@ -9,8 +9,11 @@ run [main.py](http://main.py) to try various simulation, you can change various 
 You can test two types of simulation
 
 1. Same-ratio(k) Sensitivity Analysis
+
 set `parser.args.task` as 1 and by varying the level of `same_ratio` and number of features(`num_features`) you can check the p-value and its standard deviation after repeated permutation.
+
 2. Sparse-level Sensitivity Analysis
+
 set `parser.args.task` as 0 and by varying the level of  `different_sparse_ratio` in parser.args, you are able to generate each group with various sparse ratio difference level, and you can check the p-value and its standard deviation. 
 
 ## Tutorial
