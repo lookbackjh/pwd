@@ -4,12 +4,14 @@ from scipy.stats import gaussian_kde
 import math
 from sklearn.utils import resample
 class Feature():
+
     def __init__(self,feat_num,info,bootstrapnum,epsilon,feat_info) -> None:
         self.feat_num=feat_num
         self.info=info ## an 1*n matrix for each group.
         self.bootstrapnum=bootstrapnum ##hyperparameter
         self.epsilon=epsilon
         self.feat_info=feat_info
+
     def findBandwidth(self,x_grid):
         k=0
         #print(len(self.info))
@@ -20,6 +22,7 @@ class Feature():
             #print("AD time:{}".format(time))         
             k=self.bandwidth
         return k
+        
     def findPosterior(self):
         ## With Bayesian processm obtain posterior mean for probability of zero occurence 'theta'
         #print(len(self.info))
@@ -31,6 +34,7 @@ class Feature():
         estimated_sigma=self.getBootstrapsigma(self.info,self.bootstrapnum) ## sigma for likelihood obtained via bootstrapping
         self.post_mean=self.getposterior(p_zeros,self.feat_num,estimated_sigma,self.feat_info) ## using likelihood above and known prior( with estimated interval), obtain posterior mean for zero occurence.
         return self.post_mean
+
     def AndersonDarling(self,bootstrapsample,OOB,x_grid,epsilon):
         ## get KDE estimation for each bootstrap...
         #start=time.time()
@@ -78,8 +82,8 @@ class Feature():
         #end=time.time()
         #print("AD Tim:{}".format(end-start))
         return opt ##returns bandwidth that gives smallest bandwidth
-    def getposterior(self,p_zeros,feat_num,estimated_sigma,feat_info):
 
+    def getposterior(self,p_zeros,feat_num,estimated_sigma,feat_info):
     ##returns estimated mean for the posterior
         hyper_sigma=0.3 ##hyperparameter.
         ##poesterior ~ prior * likelihood/marginal , prior as our known belief and setting interval  as a hyperparametr, and likelihood with sigma obtained by bootstrapping 
@@ -89,6 +93,7 @@ class Feature():
         posterior_mean= (prior*estimated_sigma**2+p_zeros*hyper_sigma**2)/(estimated_sigma**2+hyper_sigma**2) #mathematicall operation 
         #print("featnumber:{}' posterior :{}".format(feat_num,posterior_mean))
         return posterior_mean
+
     def doBootstrap(self,X,bootstrap_num):
     ## returns OOB and Bootstrapped data
         bootstrapsample=[]
@@ -98,6 +103,7 @@ class Feature():
             bootstrapsample.append(resample(X, n_samples=sample_num, replace=True)) ##bootstrapping
             OOB.append(np.setdiff1d(X,bootstrapsample[i]))
         return OOB,bootstrapsample
+    
     def getBootstrapsigma(self,X,bootstrap_num):
     ##returns estimatedsigma for the likelihood of the distribuion of /theta   
         p_zeros=[] ##probability of certain feature having zero counts.

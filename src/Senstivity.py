@@ -5,9 +5,11 @@ from tqdm import tqdm
 import time
 from scipy.stats import truncnorm
 class Sensitivity():
+
     def __init__(self,args) -> None:
         self.args=args
         pass
+
     def simulate(self,feat_info):
         if self.args.task==0:        ## simulation for sparse ratio
             k_candidate=[0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
@@ -32,6 +34,7 @@ class Sensitivity():
                 pvals.append(pval)
             print("For feature number {} and Differnt Ratio {}".format(self.args.num_feature,self.args.same_ratio))    
             print("Mean of the P-value:{} Standard Deviation:{}".format(np.mean(np.array(pvals)),np.std(np.array(pvals))))
+
     def get_group_nk(self,n,k):
         bounds=[0,20]
         pointwiseentropyg1=[]
@@ -73,6 +76,7 @@ class Sensitivity():
         p1_10=np.array(pointwiseentropyg1)
         p2_10=np.array(pointwiseentropyg2)
         return p1_10,p2_10
+    
     def get_group_sparse(self,n,sparseratio): 
         bounds=[0,20]
         predecsion_mean=np.random.randint(1,13,n)

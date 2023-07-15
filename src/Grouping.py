@@ -6,7 +6,8 @@ import math
 class Groupinfo():
     ## X will be d*n matrix where d is number of feature and n is number of sample
     def __init__(self,X):
-        self.X=X        
+        self.X=X
+
     def getsamplenum(self):
         n,d=np.shape(self.X)
         num_lack=[]
@@ -14,12 +15,14 @@ class Groupinfo():
             n_zeros = np.count_nonzero( self.X[i,:])
             num_lack.append(n_zeros)
         return np.array(num_lack)
+    
     def getsigma(self):
         n,d=np.shape(self.X)
         sigma=[]
         for i in range(n):
             sigma.append(np.var(self.X[i,:]))
         return sigma
+    
     def metabandwidth(self,sigma,sigmas,bw,log=False):
         if log == False:
             return math.exp(0.1278*(sigma**2)-0.587*sigma+0.9244) ## our predefined values. 
@@ -27,6 +30,7 @@ class Groupinfo():
             model = np.poly1d(np.polyfit(sigmas, bw, 2))
             coef=model.coefficients
             return ((sigma**2)*coef[0]+(sigma)*coef[1]+coef[2])
+        
     def finddistribution(self,x_grid,epsilon,feat_info):
         ## each feature for each group will have a information for bandwidth and posterior probability for 0 occurences..
         n,d=np.shape(self.X)
@@ -39,6 +43,7 @@ class Groupinfo():
             group_posterior.append(temp.findPosterior())
         self.group_bandwidth=group_bandwidth
         self.group_posterior=group_posterior
+
     def metadistribution(self, x_grid, epsilon,bw,sigma,feat_info, log=False):
         n,d=np.shape(self.X)
         group_bandwidth=[]
@@ -56,6 +61,7 @@ class Groupinfo():
             else:
                 group_bandwidth.append(0)
         self.group_bandwidth=group_bandwidth
+
     def datatransformation(w1):
         w2=copy.deepcopy(w1)
         n,d=np.shape(w2)
@@ -74,6 +80,7 @@ class Groupinfo():
                         w2[i][j]=math.log(w2[i][j])
         w2=np.negative(w2)
         return w2
+    
     def summation(self,x_grid):
         ##must be done after finddistribution
         try:

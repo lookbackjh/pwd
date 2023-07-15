@@ -12,12 +12,14 @@ import os
 import time
 from tqdm import tqdm
 class Permutator():
+
     def __init__(self,g1,g2,feat_info,args) -> None:
         self.g1=g1
         self.g2=g2
         self.args=args
         self.feat_info=feat_info
         pass
+
     def permutation(self):
         epsilon=self.args.epsilon
         x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,0.1)
@@ -50,6 +52,7 @@ class Permutator():
             print("Distance for iteration{} {}".format(i+1,dis))
             k+=diff<dis
         return (k/self.args.p_num)
+    
     def metapermutation(self):
         epsilon=self.args.epsilon
         x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,self.args.interval)
@@ -89,6 +92,7 @@ class Permutator():
             #print("Distance for iteration{} {}".format(i+1,dis))
             k+=diff<dis
         return (k/self.args.p_num)
+    
     def ShannonJanson(self,pos1,pos2,dis1,dis2,x_grid):
     ##returns sum of two KL divergence
         cum1=self.simpson(dis1,x_grid)
@@ -96,6 +100,7 @@ class Permutator():
         x=self.KLdivergence(pos1,pos2,dis1,dis2,x_grid)
         y=self.KLdivergence(pos2,pos1, dis2,dis1,x_grid)
         return x+y
+    
     def KLdivergence(self,pos1,pos2,dis1,dis2,x_grid):
         pos_dis=0
         if pos1==0 or pos2==0:
@@ -112,8 +117,8 @@ class Permutator():
         g=dis1[:stop_pos]*(np.log(dis1[:stop_pos]/dis2[:stop_pos]))
         
         con_sum=self.simpson(g,x_grid[:stop_pos])
-
         return pos_dis+con_sum
+    
     def simpson(self,dis,x_grid):
         con_sum=0
         con_sum+=dis[0]
