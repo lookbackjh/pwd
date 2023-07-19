@@ -14,10 +14,10 @@ set `parser.args.task` as 1 and by varying the level of `same_ratio` and number 
 
 2. Sparse-level Sensitivity Analysis
 
-set `parser.args.task` as 0 and by varying the level of  `different_sparse_ratio` in parser.args, you are able to generate each group with various sparse ratio difference level, and you can check the p-value and its standard deviation. 
+set `parser.args.task` as 0  you are able to generate each group with various sparse ratio difference level, and you can check the p-value and its standard deviation. 
 
 ## Tutorial
 
 ---
 
-from Example folder, you can see examples for meta analysis, origianl version of permutation with phylum-level microbiome, and plotting ordered pointwise entropy. Instructions are detailed in Jupyter notebook.
+from Example folder, you can see examples of synthetic data generation and  meta analysis of them, , origianl version of permutation with phylum-level microbiome, and plots of ordered pointwise entropy. Instructions are detailed in Jupyter notebook.
