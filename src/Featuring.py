@@ -43,7 +43,7 @@ class Feature():
         bandwidth_loss=[]
         MIN_INT=-999999999
         cur_min=MIN_INT
-        bandwidths=np.arange(0.1,5,0.05)
+        bandwidths=np.arange(0.1,9,0.1)
         opt=0
         ## interation : for every bandwith, for length of Bootstrap number , for length of OOB number for each bootstrap, integration( another interation needed) 
         for j in bandwidths:

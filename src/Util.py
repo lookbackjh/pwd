@@ -58,13 +58,15 @@ class Permutator():
         x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,self.args.interval)
         feat_info=np.zeros(self.args.num_feature)
         log=self.args.predefined
-        bwfilename="n{}bw_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
-        sigfilename="n{}sigma_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
-        curdir=(os.getcwd())
-        sig=os.path.join(curdir, 'Generated_Data','sensitivity_by_n',sigfilename)
-        b=os.path.join(curdir,'Generated_Data','sensitivity_by_n',bwfilename)
-        sigma=np.loadtxt(sig)
-        bw=np.loadtxt(b)
+        # bwfilename="n{}bw_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
+        # sigfilename="n{}sigma_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
+        # curdir=(os.getcwd())
+        # sig=os.path.join(curdir, 'Generated_Data','sensitivity_by_n',sigfilename)
+        # b=os.path.join(curdir,'Generated_Data','sensitivity_by_n',bwfilename)
+        
+        df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
+        sigma=df['sigma']
+        bw=df['bandwidth']
         feat_info+=1.5 ## make prior not existing. in simulated case. 
 
         n,d=np.shape(self.g1)
@@ -77,7 +79,7 @@ class Permutator():
         t2pos,t2eva=t2.summation(x_grid)
         k=0
         diff=self.ShannonJanson(t1pos,t2pos,t1eva,t2eva,x_grid) ## original data's distance. 
-        for i in range(self.args.p_num):
+        for i in tqdm(range(self.args.p_num)):
             z=np.take(z,np.random.permutation(z.shape[1]),axis=1,out=z)
             g1=z[:,d:]
             g2=z[:,:d]
