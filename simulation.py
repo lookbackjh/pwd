@@ -15,8 +15,9 @@ from tqdm import tqdm
 import os
 #import dirichlet
 from tqdm import tqdm
+
 parser = argparse.ArgumentParser(description='Args Sparse Simulation')
-parser.add_argument('--p_num', type=int, default=100, help='num ber of permutation')
+parser.add_argument('--p_num', type=int, default=1000, help='num ber of permutation')
 parser.add_argument('--x_grid_start',type=int, default=1,help='start of the x-axis')
 parser.add_argument('--x_grid_end',type=int, default=20,help='end of the x-axis')
 parser.add_argument('--same_ratio',type=int, default=90,help='Difference ratio for each group') ## only can choose 50,90, 100
@@ -25,6 +26,8 @@ parser.add_argument('--epsilon',type=float,default=0.0001,help='to_avoid zero di
 parser.add_argument('--repeat_num',type=int, default=1, help='to see the mean and sd for the p-value after repeated permutation')
 parser.add_argument('--num_feature',type=int,default=100,help='number of feature to simulate') ## only can choose n=100, 300, 600
 parser.add_argument('--predefined',type=bool,default=False,help='False if there is predefined meta analysis')
+parser.add_argument('--theta',type=float,default=0.0001,help='theta value for dirichlet')
+parser.add_argument('--num_samples',type=int,default=100,help='number of samples')
 args, _ = parser.parse_known_args()
 
 

@@ -64,7 +64,15 @@ class Permutator():
         # sig=os.path.join(curdir, 'Generated_Data','sensitivity_by_n',sigfilename)
         # b=os.path.join(curdir,'Generated_Data','sensitivity_by_n',bwfilename)
         
-        df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
+        if self.args.num_sample==20:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n20_df.csv")
+        elif self.args.num_sample==50:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
+        
+        else:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n100_df.csv")
+
+        #df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
         sigma=df['sigma']
         bw=df['bandwidth']
         feat_info+=1.5 ## make prior not existing. in simulated case. 
