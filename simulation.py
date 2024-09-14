@@ -13,7 +13,7 @@ from src.Util import Permutator
 import time
 from tqdm import tqdm
 import os
-import dirichlet
+#import dirichlet
 from tqdm import tqdm
 parser = argparse.ArgumentParser(description='Args Sparse Simulation')
 parser.add_argument('--p_num', type=int, default=100, help='num ber of permutation')
@@ -52,8 +52,8 @@ beta=0.9
 num_microbiomes_to_change=200
 # sort
 
-start_idx=100
-end_idx=200
+start_idx=150
+end_idx=250
 sort_option=False
 
 
@@ -97,7 +97,7 @@ if sort_option ==True:
 #theta_1=0.000002 # overdispersion parameter
 num_samples=50 # number of samples.  this will be a major paramter. 
 
-ratio=np.random.dirichlet(ratio*10000,size=1)[0]
+#ratio=np.random.dirichlet(ratio*10000,size=1)[0]
 
 import copy
 
@@ -159,10 +159,9 @@ df=pd.concat([g1_count_df,g2_count_df])
 
 
 
-#group_df=df['group']    
 df=df.reset_index(drop=True)
-df.to_csv("Example/Meta_Analysis_Example/simulated_data_count07.csv",index=False)
-#group_df.to_csv("Example/Meta_Analysis_Example/group.csv",index=False)
+filename=f"start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{num_samples}_theta_{theta_2}_beta_{beta}.csv"
+df.to_csv(filename,index=False)
 
 
 g1_normalized = g1_count / g1_count.sum(axis=1)[:, np.newaxis]
@@ -179,9 +178,9 @@ g2_normalized_df=pd.DataFrame(g2_normalized)
 # g1_normalized_df['group']=1
 # g2_normalized_df['group']=2
 
-df=pd.concat([g1_normalized_df,g2_normalized_df])
-df=df.reset_index(drop=True)
-df.to_csv("Example/Meta_Analysis_Example/simulated_data_09.csv",index=False)
+# df=pd.concat([g1_normalized_df,g2_normalized_df])
+# df=df.reset_index(drop=True)
+# df.to_csv("Example/Meta_Analysis_Example/simulated_data_09.csv",index=False)
 
 epsilon = 1e-10  # Small constant to avoid log(0)
 g1_entropy = np.where(g1_normalized > 0.0, -np.log(g1_normalized ), 0)
@@ -202,3 +201,7 @@ simulator=Sensitivity(args)
 p=Permutator(g1_entropy,g2_entropy,feat_info,args)
 pval=p.metapermutation()
 print(pval)
+#save the p-value
+result=pd.DataFrame(pval)
+result_filename=f"start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{num_samples}_theta_{theta_2}_beta_{beta}_p_num_{args.p_num}.csv"
+result.to_csv(result_filename,index=False)
