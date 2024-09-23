@@ -64,9 +64,9 @@ class Permutator():
         # sig=os.path.join(curdir, 'Generated_Data','sensitivity_by_n',sigfilename)
         # b=os.path.join(curdir,'Generated_Data','sensitivity_by_n',bwfilename)
         
-        if self.args.num_sample==20:
+        if self.args.num_samples==20:
             df=pd.read_csv("Generated_Data/sensitivity_by_n/n20_df.csv")
-        elif self.args.num_sample==50:
+        elif self.args.num_samples==50:
             df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
         
         else:
