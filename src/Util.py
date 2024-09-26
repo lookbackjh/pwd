@@ -18,6 +18,10 @@ class Permutator():
         self.g2=g2
         self.args=args
         self.feat_info=feat_info
+        self.p_feature_posteriors_g1=[]
+        self.p_feature_evaluations_g1=[]
+        self.p_feature_posteriors_g2=[]
+        self.p_feature_evaluations_g2=[]
         pass
 
     def permutation(self):
@@ -53,6 +57,52 @@ class Permutator():
             k+=diff<dis
         return (k/self.args.p_num)
     
+    def metapermutation_feature(self):
+        epsilon=self.args.epsilon
+        x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,self.args.interval)
+        feat_info=np.zeros(self.args.num_feature)
+        log=self.args.predefined
+        # bwfilename="n{}bw_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
+        # sigfilename="n{}sigma_k{}.txt".format(self.args.num_feature,self.args.same_ratio)
+        # curdir=(os.getcwd())
+        # sig=os.path.join(curdir, 'Generated_Data','sensitivity_by_n',sigfilename)
+        # b=os.path.join(curdir,'Generated_Data','sensitivity_by_n',bwfilename)
+        
+        if self.args.num_samples==20:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n20_df.csv")
+        elif self.args.num_samples==50:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
+        
+        else:
+            df=pd.read_csv("Generated_Data/sensitivity_by_n/n100_df.csv")
+
+        #df=pd.read_csv("Generated_Data/sensitivity_by_n/n50_df.csv")
+        sigma=df['sigma']
+        bw=df['bandwidth']
+        feat_info+=1.5 ## make prior not existing. in simulated case. 
+
+        n,d=np.shape(self.g1)
+        z=np.concatenate([self.g1,self.g2],axis=1) # for permutation.
+        for i in tqdm(range(self.args.p_num)):
+            z=np.take(z,np.random.permutation(z.shape[1]),axis=1,out=z)
+            g1=z[:,d:]
+            g2=z[:,:d]
+            #print(g1.shape)
+            t1=Groupinfo(g1)
+            t2=Groupinfo(g2)
+            t1.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
+            t2.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
+            t1pos,t1kde=t1.get_feature_distribution()
+            t2pos,t2kde=t2.get_feature_distribution()
+            self.p_feature_posteriors_g1.append(t1pos)
+            self.p_feature_evaluations_g1.append(t1kde)
+            self.p_feature_posteriors_g2.append(t2pos)
+            self.p_feature_evaluations_g2.append(t2kde)
+        return self.p_feature_posteriors_g1,self.p_feature_evaluations_g1,self.p_feature_posteriors_g2,self.p_feature_evaluations_g2
+
+
+
+
     def metapermutation(self):
         epsilon=self.args.epsilon
         x_grid=np.arange(self.args.x_grid_start,self.args.x_grid_end,self.args.interval)

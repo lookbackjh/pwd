@@ -16,7 +16,7 @@ import os
 #import dirichlet
 from tqdm import tqdm
 parser = argparse.ArgumentParser(description='Args Sparse Simulation')
-parser.add_argument('--p_num', type=int, default=1000, help='num ber of permutation')
+parser.add_argument('--p_num', type=int, default=10, help='num ber of permutation')
 parser.add_argument('--x_grid_start',type=int, default=1,help='start of the x-axis for integration')
 parser.add_argument('--x_grid_end',type=int, default=20,help='end of the x-axis for integration')
 parser.add_argument('--same_ratio',type=int, default=90,help='Difference ratio for each group') ## only can choose 50,90, 100
@@ -26,7 +26,7 @@ parser.add_argument('--repeat_num',type=int, default=1, help='to see the mean an
 parser.add_argument('--num_feature',type=int,default=100,help='number of feature to simulate') ## only can choose n=100, 300, 600
 parser.add_argument('--predefined',type=bool,default=False,help='False if there is predefined meta analysis')
 parser.add_argument('--theta',type=float,default=0.0001,help='theta value for dirichlet')
-parser.add_argument('--num_samples',type=int,default=20,help='number of samples')
+parser.add_argument('--num_samples',type=int,default=50,help='number of samples')
 args, _ = parser.parse_known_args()
 
 
@@ -46,8 +46,8 @@ def seed_everything(seed):
 
 
 seed=1234
-seeds=[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200]
-betas=[0.9]
+seeds=[10,20,30,40,50,60,70,80,90,100]
+betas=[0.9,0.8]
 
 for b in betas:
     
@@ -60,8 +60,8 @@ for b in betas:
         num_microbiomes_to_change=200
         # sort
 
-        start_idx=100
-        end_idx=200
+        start_idx=0
+        end_idx=10
         sort_option=True
 
 
@@ -184,7 +184,7 @@ for b in betas:
 
 
         df=df.reset_index(drop=True)
-        filename=f"s2theta20/S2_start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{args.num_samples}_theta_{theta_2}_beta_{beta}_seed{seed}.csv"
+        filename=f"s1theta50/S1_start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{args.num_samples}_theta_{theta_2}_beta_{beta}_seed{seed}.csv"
         #filename=f"S1{end_idx-start_idx}_p_num_{args.p_num}_seed{seed}_beta{beta}.csv"
         df.to_csv(filename,index=False)
 
@@ -232,14 +232,16 @@ for b in betas:
 
             #p1_100,p2_100=simulator.get_group_sparse(args.num_feature,k)
         p=Permutator(g1_entropy,g2_entropy,feat_info,args)
-        pval=p.metapermutation()
-        beta_results.append(pval)
+        g1_pos,g1_kde,g2_pos,g2_kde=p.metapermutation_feature()
+        
+        print(g1_pos)
+        #beta_results.append(pval)
  
     #save the p-value
     mean_pval=np.mean(beta_results)
     std_pval=np.std(beta_results)
-    result_filename=f"S2_start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{args.num_samples}_theta_{theta_2}_beta_{beta}_seed{seed}_p_num_{args.p_num}.csv"
-    with open("theta20_result.txt", "a") as f:
+    result_filename=f"S1_start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{args.num_samples}_theta_{theta_2}_beta_{beta}_seed{seed}_p_num_{args.p_num}.csv"
+    with open("s1theta50_result.txt", "a") as f:
         f.write(f"{result_filename}  mean_pval:{mean_pval} std_pval:{std_pval} pvals:{beta_results}\n")
         f.close()
 

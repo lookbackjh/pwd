@@ -7,6 +7,8 @@ class Groupinfo():
     ## X will be d*n matrix where d is number of feature and n is number of sample
     def __init__(self,X):
         self.X=X
+        self.feature_distribution=[]
+        self.feature_posterior=[]
 
     def getsamplenum(self):
         n,d=np.shape(self.X)
@@ -80,6 +82,23 @@ class Groupinfo():
                         w2[i][j]=math.log(w2[i][j])
         w2=np.negative(w2)
         return w2
+    
+    def get_feature_distribution(self):
+        try:
+            getattr(self, "group_bandwidth")
+        except AttributeError:
+            raise RuntimeError("You must get the information of distribution for each feature before getting the distribution")
+        n,d=np.shape(self.X)
+        feature_distribution=[]
+        for i in range(n):
+            cur_data=self.X[i,:]
+            if self.group_bandwidth[i]==0:
+                continue
+            else:
+                cur_data=cur_data.tolist()
+                kde = gaussian_kde(cur_data, bw_method=self.group_bandwidth[i] )
+                feature_distribution.append(kde)
+        return self.group_posterior, feature_distribution
     
     def summation(self,x_grid):
         ##must be done after finddistribution
