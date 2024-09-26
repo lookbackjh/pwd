@@ -83,22 +83,23 @@ class Permutator():
 
         n,d=np.shape(self.g1)
         z=np.concatenate([self.g1,self.g2],axis=1) # for permutation.
-        for i in tqdm(range(self.args.p_num)):
-            z=np.take(z,np.random.permutation(z.shape[1]),axis=1,out=z)
-            g1=z[:,d:]
-            g2=z[:,:d]
-            #print(g1.shape)
-            t1=Groupinfo(g1)
-            t2=Groupinfo(g2)
-            t1.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
-            t2.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
-            t1pos,t1kde=t1.get_feature_distribution()
-            t2pos,t2kde=t2.get_feature_distribution()
-            self.p_feature_posteriors_g1.append(t1pos)
-            self.p_feature_evaluations_g1.append(t1kde)
-            self.p_feature_posteriors_g2.append(t2pos)
-            self.p_feature_evaluations_g2.append(t2kde)
-        return self.p_feature_posteriors_g1,self.p_feature_evaluations_g1,self.p_feature_posteriors_g2,self.p_feature_evaluations_g2
+        #for i in tqdm(range(self.args.p_num)):
+            #z=np.take(z,np.random.permutation(z.shape[1]),axis=1,out=z)
+        g1=z[:,d:]
+        g2=z[:,:d]
+        #print(g1.shape)
+        t1=Groupinfo(g1)
+        t2=Groupinfo(g2)
+        t1.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
+        t2.metadistribution(x_grid,epsilon,bw,sigma,feat_info,log)
+        t1pos,t1kde,t1bw=t1.get_feature_distribution()
+        t2pos,t2kde,t2bw=t2.get_feature_distribution()
+        self.p_feature_posteriors_g1.append(t1pos)
+        self.p_feature_evaluations_g1.append(t1kde)
+        self.p_feature_posteriors_g2.append(t2pos)
+        self.p_feature_evaluations_g2.append(t2kde)
+
+        return t1pos,t1kde,t2pos,t2kde,t1bw,t2bw
 
 
 
@@ -155,7 +156,7 @@ class Permutator():
     
     def ShannonJanson(self,pos1,pos2,dis1,dis2,x_grid):
     ##returns sum of two KL divergence
-        cum1=self.simpson(dis1,x_grid)
+        #cum1=self.simpson(dis1,x_grid)
         #cum2=simpson(dis2,x_grid)
         x=self.KLdivergence(pos1,pos2,dis1,dis2,x_grid)
         y=self.KLdivergence(pos2,pos1, dis2,dis1,x_grid)

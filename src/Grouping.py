@@ -92,13 +92,15 @@ class Groupinfo():
         feature_distribution=[]
         for i in range(n):
             cur_data=self.X[i,:]
-            if self.group_bandwidth[i]==0:
+            if self.group_bandwidth[i]==0: #which means that the sigma is zero. 
+                feature_distribution.append(0)
+
                 continue
             else:
                 cur_data=cur_data.tolist()
                 kde = gaussian_kde(cur_data, bw_method=self.group_bandwidth[i] )
                 feature_distribution.append(kde)
-        return self.group_posterior, feature_distribution
+        return self.group_posterior, feature_distribution, self.group_bandwidth
     
     def summation(self,x_grid):
         ##must be done after finddistribution

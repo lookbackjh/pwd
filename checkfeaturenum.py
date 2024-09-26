@@ -60,8 +60,8 @@ seed_everything(seed)
 num_microbiomes_to_change=200
 # sort
 
-start_idx=0
-end_idx=10
+start_idx=100
+end_idx=200
 sort_option=True
 
 
@@ -186,7 +186,7 @@ df=pd.concat([g1_count_df,g2_count_df])
 df=df.reset_index(drop=True)
 filename=f"s1theta50/S1_start_idx_{start_idx}_end_idx_{end_idx}_num_samples_{args.num_samples}_theta_{theta_2}_beta_{beta}_seed{seed}.csv"
 #filename=f"S1{end_idx-start_idx}_p_num_{args.p_num}_seed{seed}_beta{beta}.csv"
-df.to_csv(filename,index=False)
+#df.to_csv(filename,index=False)
 
 
 g1_normalized = g1_count / g1_count.sum(axis=1)[:, np.newaxis]
@@ -232,34 +232,52 @@ simulator=Sensitivity(args)
 
     #p1_100,p2_100=simulator.get_group_sparse(args.num_feature,k)
 p=Permutator(g1_entropy,g2_entropy,feat_info,args)
-g1_pos,g1_kde,g2_pos,g2_kde=p.metapermutation_feature()
+g1_pos,g1_kde,g2_pos,g2_kde,g1_bw,g2_bw=p.metapermutation_feature()
 g1_pos=np.array(g1_pos)
 g2_pos=np.array(g2_pos)
 g1_evaluations=[]
 g2_evaluations=[]
-for i in range(len(g1_kde)): # which is equivalent to permutaiton number
-    eva_temp_1=[]
-    eva_temp_2=[]
-    for j in range(len(g1_kde[i])): # this is equivalent to the number of features
-        eval_1=g1_kde[i][j].evaluate(x_grid)
-        cum_1=(g1_kde[i][j].integrate_box_1d(0,16))
-        eval_2=g2_kde[i][j].evaluate(x_grid)
-        cum_2=(g2_kde[i][j].integrate_box_1d(0,16))
-        #evaluation=(1-g1_pos[i])*p/(evaluation*n)
-        g1_eva=(1-g1_pos[i][j])*eval_1/(cum_1)
-        g2_eva=(1-g2_pos[i][j])*eval_2/(cum_2)
-    
-        eva_temp_1.append(g1_eva)
-        eva_temp_2.append(g2_eva)
-    g1_evaluations.append(eva_temp_1)
-    g2_evaluations.append(eva_temp_2)
+distances=[]
+cums1=[]
+cums2=[]
+for i in tqdm(range(args.num_feature)):
+    if g1_bw[i]==0 or g2_bw[i]==0:
+        distances.append(0)
+        continue
+
+    else:
+
+        cum1=g1_kde[i].integrate_box_1d(0,20)
+        cum2=g2_kde[i].integrate_box_1d(0,20)
+        ev1=g1_kde[i].evaluate(x_grid)
+        ev2=g2_kde[i].evaluate(x_grid)
+
+        g1_evaluation=(1-g1_pos[i])*ev1/(cum1)
+        g2_evaluation=(1-g2_pos[i])*ev2/(cum2)
+        cums1.append(cum1)
+        cums2.append(cum2)
+        
+        dis=p.ShannonJanson(g1_pos[i],g2_pos[i],g1_evaluation,g2_evaluation,x_grid)
+        
+        distances.append(dis)
+
+
+    #g2_evaluations.append(eva_temp_2)
 
     #g1_evaluations.append(eva_temp)
 
 
+distances=np.array(distances)
+idx=np.argsort(distances)[::-1]
+print(idx)
+# check first 100 features and check the count if idx is between 100 and 200
 
-
-print(g1_kde.shape)
+check_count=0
+for i in idx[:100]:
+    if i>=100 and i<200:
+        check_count+=1
+print(check_count)
+#print(distances)
 
         #beta_results.append(pval)
  
